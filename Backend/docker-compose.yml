@@ -1,0 +1,78 @@
+services:
+  db:
+    image: postgres:16
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: todo_db
+      POSTGRES_USER: sahan
+      POSTGRES_PASSWORD: sahan
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - todo_network
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile  # Make sure the Dockerfile is being used correctly
+    container_name: todo_backend
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=todo_db;Username=sahan;Password=sahan
+    command: >
+      sh -c "sleep 5 && dotnet ef database update && dotnet MyBackend.dll"
+    networks:
+      - todo_network
+
+volumes:
+  postgres_data:
+networks:
+  todo_network:
+
+
+
+
+
+
+
+
+# version: '3.8'
+
+# services:
+#   db:
+#     image: postgres:latest
+#     container_name: postgres_db
+#     restart: always
+#     environment:
+#       POSTGRES_DB: todo_db
+#       POSTGRES_USER: sahan
+#       POSTGRES_PASSWORD: sahan
+#     ports:
+#       - "5432:5432"
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+
+#   backend:
+#     build: .
+#     container_name: todo_backend
+#     restart: always
+#     depends_on:
+#       - db
+#     ports:
+#       - "8080:8080"
+#     environment:
+#       - ASPNETCORE_ENVIRONMENT=Development
+#       - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=todo_db;Username=sahan;Password=sahan
+#     command: >
+#       sh -c "sleep 5 && dotnet ef database update && dotnet MyBackend.dll"
+
+# volumes:
+#   postgres_data:
