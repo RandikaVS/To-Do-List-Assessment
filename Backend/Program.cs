@@ -16,10 +16,10 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
+    options.AddPolicy("AllowReactApp",
         policy =>
         {
-            policy.AllowAnyOrigin()
+            policy.WithOrigins("http://localhost:3000")
                   .AllowAnyHeader()
                   .AllowAnyMethod()
                   .AllowCredentials();
@@ -42,8 +42,9 @@ if (app.Environment.IsDevelopment())
 }
 
 // app.UseHttpsRedirection();
-
-app.UseCors("AllowAll");
+app.UseRouting();
+app.UseCors("AllowReactApp");
+app.UseAuthorization();
 
 app.MapControllers();
 app.Run();
