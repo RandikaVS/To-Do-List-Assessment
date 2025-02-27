@@ -64,6 +64,7 @@ export default function HomeView() {
   useEffect(() => {
     
     if(create_task && create_task.success){
+      getTasksList()
       showSnackBar(create_task.message,'success')
       setTask({
         title: '',
@@ -74,7 +75,7 @@ export default function HomeView() {
       showSnackBar(create_task.message,'error')
     }
 
-  }, [create_task])
+  }, [create_task, getTasksList])
 
   const showSnackBar = (message, type) => {
     setSnackbarMessage(message || (type === "success" ? "Task Added Successfully" : "Failed to Add Task"));
