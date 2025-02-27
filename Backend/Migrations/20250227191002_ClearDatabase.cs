@@ -5,7 +5,7 @@
 namespace MyBackend.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class ClearDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

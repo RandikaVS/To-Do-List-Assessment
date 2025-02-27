@@ -4,11 +4,17 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MyBackend.Data;
+using MyBackend.Service;
+using Scrutor;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<TodoDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<ITaskService, TaskService>();
+builder.Services.Decorate<ITaskService, LoggingTaskService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -42,10 +48,11 @@ if (app.Environment.IsDevelopment())
 }
 
 // app.UseHttpsRedirection();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseRouting();
 app.UseCors("AllowReactApp");
 app.UseAuthorization();
 
 app.MapControllers();
 app.Run();
-
+public partial class Program { }
