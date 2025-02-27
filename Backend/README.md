@@ -1,15 +1,12 @@
-## 🚀 How to Run Backend with Docker
+## How to Run Backend with Docker
 
 1. **Clone the repository**  
-   ```sh
-   git clone https://github.com/your-repo.git
+
+   git clone https://github.com/RandikaVS/To-Do-List-Assessment.git
    cd /Backend
 
-RUn docker-compose up --build
+RUN docker-compose up --build
 
-docker-compose down -v
-docker-compose build --no-cache
-docker-compose up
-
- docker system prune --all --volumes --force
+# Backend will run in 
+   http://localhost:5005
 

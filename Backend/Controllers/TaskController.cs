@@ -13,13 +13,17 @@ namespace MyBackend.Controllers
     {
         private readonly TodoDbContext _context = context;
 
-        // Get all tasks
+        // Get all tasks controller
         [HttpGet("all")]
         public async Task<ActionResult<ApiResponse<IEnumerable<TodoTask>>>> GetTasks()
         {
-            var tasks = await _context.Tasks.ToListAsync();
+            var tasks = await _context.Tasks
+                               .Where(t => t.Status != "done")
+                               .OrderByDescending(t => t.CreatedAt)
+                               .Take(5)
+                               .ToListAsync();
 
-            if (tasks.Count != 0)
+            if (tasks.Any())
             {
                 return Ok(new ApiResponse<IEnumerable<TodoTask>>(tasks, "Tasks fetched successfully."));
             }
@@ -27,6 +31,7 @@ namespace MyBackend.Controllers
             return Ok(new ApiResponse<IEnumerable<TodoTask>>([], "No tasks found."));
         }
 
+        // add task controller
         [HttpPost("add")]
         public async Task<ActionResult<ApiResponse<TodoTask>>> CreateTask([FromBody] TodoTask task)
         {
